@@ -46,8 +46,9 @@ public class DoctorController {
 
     @GetMapping("/doctors/{name}")
     public ResponseEntity<Doctor> getById(@PathVariable String name) {
+        //Test d'existence
         try {
-            Doctor doc = docRepository.findByName(name);
+            Doctor doc = docRepository.findByName(name).get();
             return new ResponseEntity<>(doc, HttpStatus.OK);
         } catch (NoSuchElementException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -57,7 +58,7 @@ public class DoctorController {
 
     @GetMapping("/doctors/{name}/appointments")
     public ResponseEntity<List<Appointment>> getAllDocAppointments(@PathVariable String name) {
-        Doctor doc = docRepository.findByName(name);
+        Doctor doc = docRepository.findByName(name).get();
         List<Appointment> appts = doc.getAppointments();
         return new ResponseEntity<>(appts,HttpStatus.OK);
     }
@@ -65,8 +66,12 @@ public class DoctorController {
 
     @DeleteMapping("/doctors/{name}")
     public ResponseEntity<Boolean> deleteDoctor(@PathVariable String name) {
+        //Test d'existence
         try {
-            Doctor doc = docRepository.findByName(name);
+            Doctor doc = docRepository.findByName(name).get();
+            //test d'intégrité
+            if(doc.getAppointments().size() != 0)
+                return new ResponseEntity<>(false,HttpStatus.CONFLICT);
             docRepository.delete(doc);
             return new ResponseEntity<>(true, HttpStatus.OK);
         } catch (NoSuchElementException e) {

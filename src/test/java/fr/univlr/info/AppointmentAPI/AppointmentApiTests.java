@@ -302,7 +302,6 @@ public class AppointmentApiTests {
         }
     }
 
-    /*
     @Test
     @Order(14)
     public void testAddAppointmentsforOneDoctor() {
@@ -329,7 +328,6 @@ public class AppointmentApiTests {
         }
     }
 
-    /*
     @Test
     @Order(15)
     public void testAddAlreadyBookedAppointment() {
@@ -347,7 +345,6 @@ public class AppointmentApiTests {
         }
     }
 
-    /*
     @Test
     @Order(16)
     public void testDeleteDoctorFail() {
@@ -376,6 +373,7 @@ public class AppointmentApiTests {
         }
     }
 
+    /*
     // Question 4 : templated request ****************************************
 
     @Test
@@ -399,6 +397,7 @@ public class AppointmentApiTests {
         }
     }
 
+    /*
     @Test
     @Order(19)
     public void testGetAllAppointmentsWithInvalidDate() {
