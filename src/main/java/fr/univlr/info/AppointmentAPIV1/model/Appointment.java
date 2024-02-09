@@ -5,6 +5,10 @@ import fr.univlr.info.AppointmentAPIV1.controller.AppointmentDateConstraint;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
@@ -15,6 +19,11 @@ public class Appointment {
     @Id
     @GeneratedValue
     private Long id;
+
+    @JsonIgnore
+    @ManyToOne(targetEntity=Doctor.class)
+    private Doctor doctorObj;
+
     private String doctor;
     private Date startDate, endDate;
     private String patient;

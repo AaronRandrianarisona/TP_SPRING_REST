@@ -1,6 +1,7 @@
 package fr.univlr.info.AppointmentAPIV1.controller;
 
 import fr.univlr.info.AppointmentAPIV1.model.Appointment;
+import fr.univlr.info.AppointmentAPIV1.model.Doctor;
 import fr.univlr.info.AppointmentAPIV1.store.AppointmentRepository;
 import fr.univlr.info.AppointmentAPIV1.store.DoctorRepository;
 
@@ -46,18 +47,22 @@ public class AppointmentController {
 
     @PostMapping("/appointments")
     ResponseEntity<Appointment> newAppointment(@Valid @RequestBody Appointment appt) {
-        // if(this.apptRepository.findById(appt.getId()).isPresent()) {
-        // return new ResponseEntity<>(HttpStatus.CONFLICT);
-        // }
-        if(appt.getDoctorObj() != null) 
-            docRepository.save(appt.getDoctorObj());
+        Doctor doc = docRepository.findByName(appt.getDoctor()).get();
+        // if (appt.getDoctorObj() != null)
+        //     docRepository.save(appt.getDoctorObj());
+        if (doc != null) {
+            appt.setDoctorObj(doc);
+        }
+        if (!isAvailable(appt, doc)) { // Verifie que le creneau est disponible, et que le docteur renseigne existe
+            return new ResponseEntity<>(null, HttpStatus.CONFLICT);
+        }
         Appointment appointment = apptRepository.save(appt);
+        // MAJ de l'header sur l'emplacement de la nouvelle ressource
         HttpHeaders headers = new HttpHeaders();
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(appointment.getId())
                 .toUri();
-        // URI location = URI.create("http://localhost:8000/api/appointments");
         headers.set("Accept", "application/json");
         headers.setLocation(location);
         return new ResponseEntity<>(appointment, headers, HttpStatus.CREATED);
@@ -65,6 +70,7 @@ public class AppointmentController {
 
     @GetMapping("/appointments/{id}")
     public ResponseEntity<Appointment> getById(@PathVariable Long id) {
+        // Test d'existence
         try {
             Appointment appt = apptRepository.findById(id).get();
             return new ResponseEntity<>(appt, HttpStatus.OK);
@@ -87,6 +93,7 @@ public class AppointmentController {
 
     @DeleteMapping("/appointments/{id}")
     public ResponseEntity<Boolean> deleteAppointment(@PathVariable Long id) {
+        // Test d'existence
         try {
             Appointment appt = apptRepository.findById(id).get();
             apptRepository.delete(appt);
@@ -97,9 +104,34 @@ public class AppointmentController {
 
     }
 
+    /**
+     * 
+     * @return
+     */
     @DeleteMapping("/appointments")
     public ResponseEntity<Boolean> deleteAllAppointment() {
         apptRepository.deleteAll();
         return new ResponseEntity<>(true, HttpStatus.OK);
+    }
+
+    /**
+     * Verifie si un le crenaux du nouveau rendez vous est compris partiellement ou
+     * entierement dans l'un des rendez vous du docteur renseigne, retourne aussi faux dans le cas ou un creneaux est assigne a un docteur non existant dans la bdd
+     * 
+     * @param appt
+     * @param doctor
+     * @return Retourne vrai lorsque le crenaux est disponible pour le docteur
+     *         concerne
+     */
+    private Boolean isAvailable(Appointment appt, Doctor doctor) {
+        if(doctor == null){
+            return false;
+        }
+        for (Appointment docAppt : doctor.getAppointments()) {
+            if (!docAppt.getStartDate().after(appt.getEndDate()) && !docAppt.getEndDate().before(appt.getStartDate())) {
+                return false;
+            }
+        }
+        return true;
     }
 }
