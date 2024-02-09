@@ -2,6 +2,8 @@ package fr.univlr.info.AppointmentAPI;
 
 import fr.univlr.info.AppointmentAPIV1.AppointmentApiApplication;
 import fr.univlr.info.AppointmentAPIV1.model.Appointment;
+import fr.univlr.info.AppointmentAPIV1.model.Doctor;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -273,7 +275,7 @@ public class AppointmentApiTests {
     // Uncomment instantiation of doctors in LoadDatabase class.
     // We start with no appointments (see test 11)
 
-    /*
+    
     @Test
     @Order(12)
     public void testGetAllDoctors1() {
@@ -288,6 +290,7 @@ public class AppointmentApiTests {
         }
     }
 
+    /*
     @Test
     @Order(13)
     public void testGetOneDoctor() {
