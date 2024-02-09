@@ -19,12 +19,17 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.DateTimeException;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -39,17 +44,27 @@ public class AppointmentController {
         this.docRepository = docRepository;
     }
 
+    
     @GetMapping("/appointments")
-    ResponseEntity<Collection<Appointment>> all() {
-        List<Appointment> appts = apptRepository.findAll();
+    ResponseEntity<Collection<Appointment>> all(@Valid @RequestParam(required = false) String date) {
+        List<Appointment> appts;
+        if(date != null ) { //pour une requete avec parametre
+            //Check if date is in valid format
+            try {
+                appts = apptRepository.findByStartDateGreaterThan(parseDate(date));
+                return new ResponseEntity<>(appts, HttpStatus.OK);
+            } catch (DateTimeException e) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+
+        }
+        appts = apptRepository.findAll();
         return new ResponseEntity<>(appts, HttpStatus.OK);
     }
 
     @PostMapping("/appointments")
     ResponseEntity<Appointment> newAppointment(@Valid @RequestBody Appointment appt) {
         Doctor doc = docRepository.findByName(appt.getDoctor()).get();
-        // if (appt.getDoctorObj() != null)
-        //     docRepository.save(appt.getDoctorObj());
         if (doc != null) {
             appt.setDoctorObj(doc);
         }
@@ -80,6 +95,12 @@ public class AppointmentController {
 
     }
 
+    /**
+     * Methode pour modifier un rendez vous
+     * @param id
+     * @param appt
+     * @return
+     */
     @PutMapping("/appointments/{id}")
     public ResponseEntity<Appointment> updateAppointment(@PathVariable Long id, @Valid @RequestBody Appointment appt) {
         Appointment oldAppt = apptRepository.findById(id).get();
@@ -114,6 +135,22 @@ public class AppointmentController {
         return new ResponseEntity<>(true, HttpStatus.OK);
     }
 
+
+
+
+
+
+
+    // utility method...
+    public static Date parseDate(String date) throws DateTimeException {
+        try {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
+            format.setLenient(false); //Desactive la tolerance dans le format de la date , pour avoir une verification plus stricte
+            return format.parse(date);
+        } catch (ParseException e) {
+            throw new DateTimeException("Wrong date: " + date);
+        }
+    }
     /**
      * Verifie si un le crenaux du nouveau rendez vous est compris partiellement ou
      * entierement dans l'un des rendez vous du docteur renseigne, retourne aussi faux dans le cas ou un creneaux est assigne a un docteur non existant dans la bdd
