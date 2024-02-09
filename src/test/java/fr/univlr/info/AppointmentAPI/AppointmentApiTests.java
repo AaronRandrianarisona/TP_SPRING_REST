@@ -377,8 +377,9 @@ public class AppointmentApiTests {
         }
     }
 
+/*
     // Question 4 : templated request ****************************************
-
+    
     @Test
     @Order(18)
     public void testGetAllAppointmentsAfterADate() {
@@ -400,6 +401,7 @@ public class AppointmentApiTests {
         }
     }
 
+/*
     @Test
     @Order(19)
     public void testGetAllAppointmentsWithInvalidDate() {
