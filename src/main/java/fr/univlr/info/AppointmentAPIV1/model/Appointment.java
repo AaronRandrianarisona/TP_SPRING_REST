@@ -5,6 +5,7 @@ import fr.univlr.info.AppointmentAPIV1.controller.AppointmentDateConstraint;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -20,6 +21,7 @@ public class Appointment {
     private Long id;
 
     @JsonIgnore
+    @ManyToOne(targetEntity=Doctor.class)
     private Doctor doctorObj;
 
     private String doctor;
