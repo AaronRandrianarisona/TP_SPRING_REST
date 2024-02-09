@@ -5,6 +5,9 @@ import fr.univlr.info.AppointmentAPIV1.controller.AppointmentDateConstraint;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
@@ -15,6 +18,10 @@ public class Appointment {
     @Id
     @GeneratedValue
     private Long id;
+
+    @JsonIgnore
+    private Doctor doctorObj;
+
     private String doctor;
     private Date startDate, endDate;
     private String patient;
@@ -91,6 +98,14 @@ public class Appointment {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, doctor, startDate, endDate, patient);
+        return Objects.hash(id, doctor, startDate, endDate, patient,doctorObj);
+    }
+
+    public Doctor getDoctorObj() {
+        return doctorObj;
+    }
+
+    public void setDoctorObj(Doctor doctorObj) {
+        this.doctorObj = doctorObj;
     }
 }
