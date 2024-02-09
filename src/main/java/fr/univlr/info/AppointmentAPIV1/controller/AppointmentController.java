@@ -48,8 +48,6 @@ public class AppointmentController {
     @PostMapping("/appointments")
     ResponseEntity<Appointment> newAppointment(@Valid @RequestBody Appointment appt) {
         Doctor doc = docRepository.findByName(appt.getDoctor()).get();
-        // if (appt.getDoctorObj() != null)
-        //     docRepository.save(appt.getDoctorObj());
         if (doc != null) {
             appt.setDoctorObj(doc);
         }
