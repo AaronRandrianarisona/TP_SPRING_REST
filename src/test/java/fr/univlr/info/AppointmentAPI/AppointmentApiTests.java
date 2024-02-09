@@ -12,7 +12,11 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.server.core.TypeReferences;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,9 +27,11 @@ import org.springframework.web.client.RestTemplate;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.DateTimeException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
@@ -373,7 +379,6 @@ public class AppointmentApiTests {
         }
     }
 
-/*
     // Question 4 : templated request ****************************************
     
     @Test
@@ -397,7 +402,6 @@ public class AppointmentApiTests {
         }
     }
 
-/*
     @Test
     @Order(19)
     public void testGetAllAppointmentsWithInvalidDate() {
@@ -412,7 +416,7 @@ public class AppointmentApiTests {
     }
 
     // Question 5 : HAL feature **********************************************
-
+/*
     @Test
     @Order(20)
     public void testGetAllAppointmentHALWithRestTemplate() {
