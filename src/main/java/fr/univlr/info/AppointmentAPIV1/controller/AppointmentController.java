@@ -2,6 +2,8 @@ package fr.univlr.info.AppointmentAPIV1.controller;
 
 import fr.univlr.info.AppointmentAPIV1.model.Appointment;
 import fr.univlr.info.AppointmentAPIV1.store.AppointmentRepository;
+import fr.univlr.info.AppointmentAPIV1.store.DoctorRepository;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.hateoas.MediaTypes;
@@ -29,9 +31,11 @@ import java.util.NoSuchElementException;
 @RequestMapping(path = "/api")
 public class AppointmentController {
     private final AppointmentRepository apptRepository;
+    private final DoctorRepository docRepository;
 
-    public AppointmentController(AppointmentRepository apptRepository) {
+    public AppointmentController(AppointmentRepository apptRepository, DoctorRepository docRepository) {
         this.apptRepository = apptRepository;
+        this.docRepository = docRepository;
     }
 
     @GetMapping("/appointments")
@@ -45,6 +49,8 @@ public class AppointmentController {
         // if(this.apptRepository.findById(appt.getId()).isPresent()) {
         // return new ResponseEntity<>(HttpStatus.CONFLICT);
         // }
+        if(appt.getDoctorObj() != null) 
+            docRepository.save(appt.getDoctorObj());
         Appointment appointment = apptRepository.save(appt);
         HttpHeaders headers = new HttpHeaders();
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -92,7 +98,7 @@ public class AppointmentController {
     }
 
     @DeleteMapping("/appointments")
-    public ResponseEntity<Boolean> deleteAllAppointment(@PathVariable(required = false) Long id) {
+    public ResponseEntity<Boolean> deleteAllAppointment() {
         apptRepository.deleteAll();
         return new ResponseEntity<>(true, HttpStatus.OK);
     }
