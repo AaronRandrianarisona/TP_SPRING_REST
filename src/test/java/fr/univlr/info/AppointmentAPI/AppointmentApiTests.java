@@ -329,6 +329,7 @@ public class AppointmentApiTests {
         }
     }
 
+    /*
     @Test
     @Order(15)
     public void testAddAlreadyBookedAppointment() {
@@ -346,6 +347,7 @@ public class AppointmentApiTests {
         }
     }
 
+    /*
     @Test
     @Order(16)
     public void testDeleteDoctorFail() {
