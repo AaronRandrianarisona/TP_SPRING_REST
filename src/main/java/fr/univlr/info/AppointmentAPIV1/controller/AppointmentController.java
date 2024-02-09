@@ -48,7 +48,7 @@ public class AppointmentController {
     @GetMapping("/appointments")
     ResponseEntity<Collection<Appointment>> all(@Valid @RequestParam(required = false) String date) {
         List<Appointment> appts;
-        if(date != null ) {
+        if(date != null ) { //pour une requete avec parametre
             //Check if date is in valid format
             try {
                 appts = apptRepository.findByStartDateGreaterThan(parseDate(date));

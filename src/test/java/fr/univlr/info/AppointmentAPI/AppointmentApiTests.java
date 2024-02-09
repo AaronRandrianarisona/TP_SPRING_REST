@@ -414,9 +414,8 @@ public class AppointmentApiTests {
             assertSame(e.getStatusCode(),HttpStatus.BAD_REQUEST);
         }
     }
-
-    // Question 5 : HAL feature **********************************************
 /*
+    // Question 5 : HAL feature **********************************************
     @Test
     @Order(20)
     public void testGetAllAppointmentHALWithRestTemplate() {
@@ -442,6 +441,7 @@ public class AppointmentApiTests {
         }
     }
 
+    /*
     @Test
     @Order(21)
     public void testGetOneAppointmentHALWithRestTemplate() {
