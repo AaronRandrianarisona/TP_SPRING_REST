@@ -92,7 +92,7 @@ public class AppointmentController {
     }
 
     @DeleteMapping("/appointments")
-    public ResponseEntity<Boolean> deleteAllAppointment(@PathVariable(required = false) Long id) {
+    public ResponseEntity<Boolean> deleteAllAppointment() {
         apptRepository.deleteAll();
         return new ResponseEntity<>(true, HttpStatus.OK);
     }

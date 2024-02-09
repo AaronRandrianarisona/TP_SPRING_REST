@@ -290,7 +290,6 @@ public class AppointmentApiTests {
         }
     }
 
-    /*
     @Test
     @Order(13)
     public void testGetOneDoctor() {
@@ -303,6 +302,7 @@ public class AppointmentApiTests {
         }
     }
 
+    /*
     @Test
     @Order(14)
     public void testAddAppointmentsforOneDoctor() {

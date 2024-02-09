@@ -57,10 +57,10 @@ public class DoctorController {
         return new ResponseEntity<>(Doctor, headers, HttpStatus.CREATED);
     }
 
-    @GetMapping("/doctors/{id}")
-    public ResponseEntity<Doctor> getById(@PathVariable Long id) {
+    @GetMapping("/doctors/{name}")
+    public ResponseEntity<Doctor> getById(@PathVariable String name) {
         try {
-            Doctor doc = docRepository.findById(id).get();
+            Doctor doc = docRepository.findByName(name);
             return new ResponseEntity<>(doc, HttpStatus.OK);
         } catch (NoSuchElementException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -79,10 +79,10 @@ public class DoctorController {
     //     return new ResponseEntity<>(updateddoc, HttpStatus.OK);
     // }
 
-    @DeleteMapping("/doctors/{id}")
-    public ResponseEntity<Boolean> deleteDoctor(@PathVariable Long id) {
+    @DeleteMapping("/doctors/{name}")
+    public ResponseEntity<Boolean> deleteDoctor(@PathVariable String name) {
         try {
-            Doctor doc = docRepository.findById(id).get();
+            Doctor doc = docRepository.findByName(name);
             docRepository.delete(doc);
             return new ResponseEntity<>(true, HttpStatus.OK);
         } catch (NoSuchElementException e) {
@@ -92,7 +92,7 @@ public class DoctorController {
     }
 
     @DeleteMapping("/doctors")
-    public ResponseEntity<Boolean> deleteAllDoctor(@PathVariable(required = false) Long id) {
+    public ResponseEntity<Boolean> deleteAllDoctor() {
         docRepository.deleteAll();
         return new ResponseEntity<>(true, HttpStatus.OK);
     }
